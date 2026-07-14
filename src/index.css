@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --container-container: 1320px;
+  --color-c1: #DB4444;
+  --color-c2: #FAFAFA;
+  --font-pop: "Poppins","sans-serif";
+  --font-inter: "Inter","sans-serif";
+
+  --animate-icon-shake: icon-shake 0.4s ease;
+
+  @keyframes icon-shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(-12deg); }
+    40% { transform: rotate(12deg); }
+    60% { transform: rotate(-8deg); }
+    80% { transform: rotate(8deg); }
+    100% { transform: rotate(0deg); }
+  }
+}
