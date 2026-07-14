@@ -7,8 +7,18 @@ import Sbimg from '../assets/Sb-img.png'
 import { Link } from 'react-router-dom'
 import Login from '../pages/Login'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { log } from 'firebase/firestore/pipelines'
+ import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const SBanner = () => {
+  const auth = getAuth();
+  let EmailRegex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  let lowercase=/(?=.*[a-z])/
+  let uppercase =/(?=.*[A-Z])/
+  let digit =/(?=.*\d)/
+  let special  =/(?=.*[@$!%*?&])/
+let characters = /^.{8,16}$/
 let [name,SetName]=useState("")
 let [nameError , SetNameError]=useState()
 let [email,SetEmail]=useState("")
@@ -33,22 +43,85 @@ let handlePassword=(e)=>{
   SetPassword(e.target.value);
   SetPasswordError("")
 }
-let handleCreatAccount=()=>{
+
+const handleCreatAccount = () => {
+
   if(!name){
-    SetNameError(" Please Enter Your Name :")
-  }if(!email){
-SetEmailError(" Please Enter Your Email :")
-  }if(!password){
-    SetPasswordError(" Please Enter Your Password :")
+    SetNameError("Please Enter Your Name :")
   }
+
+  if(!email){
+    SetEmailError("Please Enter Your Email :")
+  }
+  else if(!EmailRegex.test(email)){
+    SetEmailError("Please Enter Valid Email :")
+  }
+
+
+  if(!password){
+    SetPasswordError("Please Enter Your Password :")
+  }
+  else if(!characters.test(password)){
+    SetPasswordError("Password must be 8-16 characters long :")
+  }
+  else if(!lowercase.test(password)){
+    SetPasswordError("Must contain at least one lowercase letter :")
+  }
+  else if(!uppercase.test(password)){
+    SetPasswordError("Must contain at least one uppercase letter :")
+  }
+  else if(!digit.test(password)){
+    SetPasswordError("Must contain at least one digit :")
+  }
+  else if(!special.test(password)){
+    SetPasswordError("Must contain at least one special character :")
+  }
+
+
+  if(
+    name &&
+    email &&
+    password &&
+    EmailRegex.test(email) &&
+    lowercase.test(password) &&
+    uppercase.test(password) &&
+    digit.test(password) &&
+    special.test(password) &&
+    characters.test(password)
+  ){
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+toast.success("Registretion Successfull");
+
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  console.log(errorCode);
+  console.log(errorMessage);
   
+  
+  });
+  }
+
 }
 
-
-
   return (
+   
     <section className='relative min-h-screen'>
-      
+    <ToastContainer
+position="top-center"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="Light"
+transition={Bounce}
+/>
       {/* Left Side Image */}
       <div className='absolute w-[54%] bg-[#CBE4E8] h-200 rounded flex justify-center items-center'>
         <Image className='w-full h-200' src={Sbimg}/>
@@ -183,73 +256,75 @@ SetEmailError(" Please Enter Your Email :")
   )}
 </div>
 
- <div className="relative">
-  <input
-    type={showPassword ? "text" : "password"}
-    value={password}
-    onChange={handlePassword}
-    placeholder=" "
-    className="
-      peer
-      w-full
-      rounded-2xl
-      border
-      border-gray-300
-      bg-white
-      px-5
-      pr-14
-      pt-6
-      pb-3
-      text-[16px]
-      text-gray-800
-      shadow-sm
-      outline-none
-      transition-all
-      duration-300
-      focus:border-blue-600
-      focus:ring-4
-      focus:ring-blue-100
-      focus:shadow-lg
-    "
-  />
+<div>
+  <div className="relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      value={password}
+      onChange={handlePassword}
+      placeholder=" "
+      className="
+        peer
+        w-full
+        rounded-2xl
+        border
+        border-gray-300
+        bg-white
+        px-5
+        pr-14
+        pt-6
+        pb-3
+        text-[16px]
+        text-gray-800
+        shadow-sm
+        outline-none
+        transition-all
+        duration-300
+        focus:border-blue-600
+        focus:ring-4
+        focus:ring-blue-100
+        focus:shadow-lg
+      "
+    />
 
-  <label
-    className="
-      absolute
-      left-5
-      top-2
-      text-sm
-      text-gray-500
-      transition-all
-      duration-300
-      peer-placeholder-shown:top-5
-      peer-placeholder-shown:text-base
-      peer-placeholder-shown:text-gray-400
-      peer-focus:top-2
-      peer-focus:text-sm
-      peer-focus:text-blue-600
-    "
-  >
-    Password
-  </label>
+    <label
+      className="
+        absolute
+        left-5
+        top-2
+        text-sm
+        text-gray-500
+        transition-all
+        duration-300
+        peer-placeholder-shown:top-5
+        peer-placeholder-shown:text-base
+        peer-placeholder-shown:text-gray-400
+        peer-focus:top-2
+        peer-focus:text-sm
+        peer-focus:text-blue-600
+      "
+    >
+      Password
+    </label>
 
-  <button
-    type="button"
-    onClick={() => setShowPassword(!showPassword)}
-    className="
-      absolute
-      right-5
-      top-1/2
-      -translate-y-1/2
-      text-gray-500
-      hover:text-blue-600
-      transition
-      duration-300
-      text-xl
-    "
-  >
-     {showPassword ? <FaEyeSlash /> : <FaEye />}
-  </button>
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="
+        absolute
+        right-5
+        top-1/2
+        -translate-y-1/2
+        text-gray-500
+        hover:text-blue-600
+        transition
+        duration-300
+        text-xl
+      "
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </button>
+  </div>
 
   {PasswordError && (
     <p className="mt-3 rounded-xl bg-red-500 px-4 py-3 text-sm font-medium text-white shadow-md">
@@ -313,6 +388,7 @@ SetEmailError(" Please Enter Your Email :")
     hover:shadow-xl
     hover:-translate-y-1
     active:scale-95
+    cursor-pointer
   "
 >
   <Image
