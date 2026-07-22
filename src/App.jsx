@@ -15,6 +15,7 @@ import Wish from "./pages/Wish.jsx";
 import Cart from "./pages/Cart.jsx";
 import CheckOut from "./pages/CheckOut.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+import Error from "./pages/Error.jsx";
 
 // Account Pages
 import Dashboard from "./pages/Account2/Dashboard.jsx";
@@ -54,15 +55,18 @@ const router = createBrowserRouter(
       <Route path="/account/returns" element={<ReturnsRefunds />} />
       <Route path="/account/reviews" element={<MyReviews />} />
       <Route
-  path="/account/recently-viewed"
-  element={<RecentlyViewed />}
-/>
+        path="/account/recently-viewed"
+        element={<RecentlyViewed />}
+      />
       <Route path="/account/help" element={<HelpCenter />} />
 
       <Route path="/wish" element={<Wish />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<CheckOut />} />
       <Route path="/productdetails/:id" element={<ProductDetails />} />
+
+      {/* 404 Error Page */}
+      <Route path="*" element={<Error />} />
     </>
   )
 );

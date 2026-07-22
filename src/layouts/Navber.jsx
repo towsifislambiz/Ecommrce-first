@@ -86,7 +86,7 @@ const handleCheckout = () => {
     SetSearch2(filtered2)
   }
 
-useEffect(() => {
+useEffect(() => {   
   const handleClickOutside = (e) => {
     if (searchRef.current && !searchRef.current.contains(e.target)) {
       setShowDropdown(false)

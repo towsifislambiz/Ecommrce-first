@@ -12,6 +12,7 @@ import Contact from "../layouts/Contact";
 import Footer from "../layouts/Footer";
 import { useDispatch } from "react-redux";
 import { activeuser } from "../slices/BreadcrumbSlice";
+import Error from "./Error";
 
 
 
@@ -43,7 +44,6 @@ const dispatch = useDispatch();
       <Featured/> 
       <Contact/>
       <Footer/>
-
 
     </div>
   )
